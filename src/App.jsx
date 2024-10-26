@@ -1,28 +1,40 @@
-import { useState } from 'react'
+import { useRef, useState, useEffect } from 'react'
 import useFetchBooksApi from './hooks/useFetchBooksApi';
 import {debounce} from './utils';
 
 function App() {
-  const { books, isLoading, setIsLoading, hasMore, setQuery, setPage } = useFetchBooksApi('',1);
+  const { query, page, books, isLoading, setQuery, setIsLoading, setPage } = useFetchBooksApi('');
+  const endOfList = useRef(null);
+  const lastBookObserver = useRef(null);
+  useEffect(()=>{
+    lastBookObserver.current = new IntersectionObserver(entries => {
+      console.log(entries)
+      const lastBook = entries[0];
+      if(!lastBook.isIntersecting) return;
+      setPage(page => page+1)
+    },{
+        threshold: 1,
+    })
+    lastBookObserver.current.observe(endOfList.current);
+    return () => lastBookObserver.current.disconnect();
+  }, [])
+  
   function handleChange(e){
     const query = e.target.value;
     setQuery(query);
-    setIsLoading(true);
     setPage(1);
   }
   return (
     <>
       <input type="text" className='searchbar' onChange={debounce(handleChange,1000)} />
-    {isLoading && <div className="loader">...Loading</div>}
       <ul>
         { 
           books?.map((book, index, books) => {
-            // if(books.length === index+1) 
-            //   return <li key={index}>{book.title}</li>
             return <li key={index}>{book.title}</li>
           })
         }
       </ul>
+      <div ref={endOfList} style={{height:'20px', backgroundColor:'red'}} className="loader">{isLoading?"...Loading":""}</div>
     </>
   )
 }
