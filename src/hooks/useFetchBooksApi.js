@@ -28,12 +28,14 @@ function useFetchBooksApi(q) {
             (async ()=>{
                 const json = await fetchBooks(controller.current.signal);
                 // console.log(json.docs);
-                if(json){
+                if(json.docs.length>0){
                     const newBooks = page===1 ? [...new Set(json.docs)] : [...books, ...[...new Set(json.docs)]];
                     setBooks(newBooks);
                 }
+                else{
+                    setIsLoading(false);
+                }
             })()
-            setIsLoading(false);
         }
         return () => controller.current.abort();
     },[query, page]);

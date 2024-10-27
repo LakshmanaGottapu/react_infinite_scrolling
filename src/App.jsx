@@ -3,7 +3,7 @@ import useFetchBooksApi from './hooks/useFetchBooksApi';
 import {debounce} from './utils';
 
 function App() {
-  const { query, page, books, isLoading, setQuery, setIsLoading, setPage } = useFetchBooksApi('');
+  const { books, isLoading, setQuery, setPage } = useFetchBooksApi('');
   const endOfList = useRef(null);
   const lastBookObserver = useRef(null);
   useEffect(()=>{
