@@ -1,11 +1,14 @@
 import { useRef, useState, useEffect } from 'react'
 import useFetchBooksApi from './hooks/useFetchBooksApi';
 import {debounce} from './utils';
+import Modal from './components/Modal';
+import {Button} from './components/styledComponents.js';
 
 function App() {
   const { books, isLoading, setQuery, setPage } = useFetchBooksApi('');
   const endOfList = useRef(null);
   const lastBookObserver = useRef(null);
+  const [modalVisibility, setModalVisibility] = useState(false);
   useEffect(()=>{
     lastBookObserver.current = new IntersectionObserver(entries => {
       console.log(entries)
@@ -26,6 +29,10 @@ function App() {
   }
   return (
     <>
+      <Button type="button"
+        onClick={()=>setModalVisibility(true)}
+      >Open Modal</Button>
+      { modalVisibility && <Modal setModalVisibility={setModalVisibility}/> }
       <input type="text" className='searchbar' onChange={debounce(handleChange,1000)} />
       <ul>
         { 
