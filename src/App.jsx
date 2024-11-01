@@ -1,5 +1,6 @@
 import { useRef, useState, useEffect } from 'react'
 import useFetchBooksApi from './hooks/useFetchBooksApi';
+import styled from 'styled-components';
 import {debounce} from './utils';
 import Modal from './components/Modal';
 import {Button} from './components/styledComponents.js';
