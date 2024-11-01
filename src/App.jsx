@@ -1,9 +1,9 @@
 import { useRef, useState, useEffect } from 'react'
 import useFetchBooksApi from './hooks/useFetchBooksApi';
-import styled from 'styled-components';
 import {debounce} from './utils';
 import Modal from './components/Modal';
 import {Button} from './components/styledComponents.js';
+import { createPortal } from 'react-dom';
 
 function App() {
   const { books, isLoading, setQuery, setPage } = useFetchBooksApi('');
@@ -29,11 +29,11 @@ function App() {
     setPage(1);
   }
   return (
-    <>
+    <div>
       <Button type="button"
         onClick={()=>setModalVisibility(true)}
       >Open Modal</Button>
-      { modalVisibility && <Modal setModalVisibility={setModalVisibility}/> }
+      { modalVisibility && createPortal(<Modal setModalVisibility={setModalVisibility}/>, document.querySelector('.modal-portal')) }
       <input type="text" className='searchbar' onChange={debounce(handleChange,1000)} />
       <ul>
         { 
@@ -43,7 +43,7 @@ function App() {
         }
       </ul>
       <div ref={endOfList} style={{height:'20px', backgroundColor:'red'}} className="loader">{isLoading?"...Loading":""}</div>
-    </>
+    </div>
   )
 }
 

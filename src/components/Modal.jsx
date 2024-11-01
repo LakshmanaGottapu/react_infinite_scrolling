@@ -1,6 +1,7 @@
 import {useEffect} from 'react';
 import styled from 'styled-components';
 import {Button} from './styledComponents.js';
+
 const Popup = styled.div`
     border:1px solid black;
     border-radius:1rem;
@@ -9,7 +10,7 @@ const Popup = styled.div`
     height:16rem;
     box-shadow:3px 3px black;
     background-color: white;
-    position:fixed;
+    position:absolute;
     left:50%;
     top:50%;
     transform: translate(-50%, -50%);
@@ -31,7 +32,7 @@ function Modal({setModalVisibility}) {
         }
     },[])
     return (
-        <div className='modal'>
+        <div className='modal' >
             <PopupWrapper className="popup-wrapper" onClick={()=>{
             setModalVisibility(false);
             }}></PopupWrapper>
